@@ -41,7 +41,7 @@ def main():
     cont = True
     while cont == True:
         timer()
-        inp = input('would you like to search again? (enter y or n) ')
+        inp = input('Would you like to search again? (enter y or n) ')
         if inp == 'y':
             cont = True
         elif inp == 'n':
