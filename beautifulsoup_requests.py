@@ -1,6 +1,7 @@
 import requests #for the website
 import bs4 #to make it easier to view the data
 import time #for the timer
+import pymongo #for the database
 
 def timer():
     query = input ("What news query would you like to search for on BBC? ")
@@ -10,6 +11,10 @@ def timer():
 
 
 def request(input):
+    #create the database
+    mydatabase = pymongo.MongoClient('mongodb://localhost:27017/')
+    mydb = mydatabase['mydbase']
+    mycol = mydb['headlines']
 
     print ('Searching for: ' + input)
 
@@ -35,9 +40,13 @@ def request(input):
     #this finds the actual headline itemprop and will print it
     for anchor in soup_obj.findAll(itemprop = 'headline'):
         print (anchor.string)
+        mydict = {"Headline": anchor.string}
+        x = mycol.insert_one(mydict)
 
 
 def main():
+
+
     cont = True
     while cont == True:
         timer()
