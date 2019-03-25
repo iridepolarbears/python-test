@@ -5,7 +5,7 @@ from pymongo import MongoClient#for the database
 
 client = MongoClient()
 db = client['BBC']
-#collection = db['Headlines']
+collection = db['Headlines']
 
 def timer():
     query = input ("What news query would you like to search for on BBC? ")
@@ -37,13 +37,13 @@ def request(input):
     print ('Another way to do this: ')
     print()
     line = {'Title of the webpage: ': soup_obj.select('title')[0].getText()}
-    posts.insert_one(line)
+    posts.collection.insert_one(line)
 
     #this finds the actual headline itemprop and will print it
     for anchor in soup_obj.findAll(itemprop = 'headline'):
         print (anchor.string)
         line = {"Title": anchor.string}
-        posts.insert_one(line)
+        posts.collection.insert_one(line)
 
 
 
@@ -57,6 +57,8 @@ def main():
         elif inp == 'n':
             cont = False
             #add in code to view the database
+            for collections in db.collection.find():
+                print (collections)
             print ('exiting...')
 
 
