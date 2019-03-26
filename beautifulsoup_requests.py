@@ -5,7 +5,7 @@ from pymongo import MongoClient#for the database
 
 client = MongoClient()
 db = client['BBC']
-collection = db['Headlines']
+headlines = db.headlines
 
 def timer():
     query = input ("What news query would you like to search for on BBC? ")
@@ -15,7 +15,7 @@ def timer():
 
 
 def request(input):
-    posts = db.posts # for inserting into the DB
+
     print ('Searching for: ' + input)
 
     #request the info the user wants from BBC
@@ -36,15 +36,21 @@ def request(input):
     print()
     print ('Another way to do this: ')
     print()
-    line = {'Title of the webpage: ': soup_obj.select('title')[0].getText()}
-    posts.collection.insert_one(line)
+    line = {'Title': soup_obj.select('title')[0].getText()}
+    result = headlines.insert_one(line)
+    print ('key: {}'.format(result.inserted_id))
 
     #this finds the actual headline itemprop and will print it
     for anchor in soup_obj.findAll(itemprop = 'headline'):
         print (anchor.string)
         line = {"Title": anchor.string}
-        posts.collection.insert_one(line)
+        result = headlines.insert_one(line)
+        print ('The key is: {}'.format(result.inserted_id))
 
+def printdb():
+    #add in code to view the database
+    for headline in headlines.find():
+        print (headline['Title'])
 
 
 def main():
@@ -56,9 +62,11 @@ def main():
             cont = True
         elif inp == 'n':
             cont = False
-            #add in code to view the database
-            for collections in db.collection.find():
-                print (collections)
+            data = input('To print the database enter y: ')
+            if data == 'y':
+                print ('printing the current database: ')
+                print()
+                printdb()
             print ('exiting...')
 
 
