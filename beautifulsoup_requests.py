@@ -38,14 +38,12 @@ def request(input):
     print()
     line = {'Title': soup_obj.select('title')[0].getText()}
     result = headlines.insert_one(line)
-    print ('key: {}'.format(result.inserted_id))
 
     #this finds the actual headline itemprop and will print it
     for anchor in soup_obj.findAll(itemprop = 'headline'):
         print (anchor.string)
         line = {"Title": anchor.string}
         result = headlines.insert_one(line)
-        print ('The key is: {}'.format(result.inserted_id))
 
 def printdb():
     #add in code to view the database
