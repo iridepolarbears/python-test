@@ -9,12 +9,12 @@ headlines = db.headlines
 
 def timer():
     query = input ("What news query would you like to search for on BBC? ")
-    request(query)
+    requestbbc(query)
     print('waiting a few seconds before the next prompt')
     time.sleep(10)#10 sec delay just in case
 
 
-def request(input):
+def requestbbc(input):
 
     print ('Searching for: ' + input)
 
