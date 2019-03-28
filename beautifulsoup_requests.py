@@ -2,6 +2,7 @@ import requests #for the website
 import bs4 #to make it easier to view the data
 import time #for the timer
 from pymongo import MongoClient#for the database
+from urllib.request import urlopen #library for opening links
 
 client = MongoClient()
 db = client['BBC']
@@ -37,18 +38,34 @@ def requestbbc(input):
     print ('Another way to do this: ')
     print()
     line = {'Title': soup_obj.select('title')[0].getText()}
-    result = headlines.insert_one(line)
+    #result = headlines.insert_one(line)
 
     #this finds the actual headline itemprop and will print it
+    #also push it into the database
+
     for anchor in soup_obj.findAll(itemprop = 'headline'):
-        print (anchor.string)
-        line = {"Title": anchor.string}
+        a_tag = anchor.next_element #get the web link tag from headline
+        link = a_tag['href']#get the actual link
+        #get the info from the url
+        headline_in = headline_info(link)#get the headline info from the link
+        print (anchor.string + ': ' + headline_in)
+        line = {
+        "Title": anchor.string,
+        "info" : headline_in
+        }
         result = headlines.insert_one(line)
+
+def headline_info (link):
+    response = requests.get(link)
+    web = bs4.BeautifulSoup(response.text,'lxml')
+    for anchor in web.find('p', {'class' : 'story-body__introduction'}):
+        return anchor.string
+
 
 def printdb():
     #add in code to view the database
     for headline in headlines.find():
-        print (headline['Title'])
+        print (headline['Title'] + ': ' + headline['info'])
 
 
 def main():
@@ -66,6 +83,7 @@ def main():
                 print()
                 printdb()
             print ('exiting...')
+            exit()
 
 
 if __name__ == "__main__":
