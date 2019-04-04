@@ -76,6 +76,8 @@ def main():
             print ('printing the current database: ')
             print()
             printdb()
+            #remove the database
+            db.headlines.remove(){}
             print ('exiting...')
             exit()
 
