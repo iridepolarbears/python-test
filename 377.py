@@ -22,7 +22,7 @@ def main():
     Z = int(input ('enter the Z of the crate: '))
     a = int(input ('enter the x for the boxes: '))
     b = int(input ('enter the y for the boxes: '))
-    c = int(input ('enter the z of the crate: '))
+    c = int(input ('enter the z of the boxes: '))
 
     print('The number of boxes that can fir in the crate are: ')
     fit = fit3(X, Y, Z, a, b, c)
